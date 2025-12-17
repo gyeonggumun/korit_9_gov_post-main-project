@@ -14,7 +14,6 @@ function AuthRoute() {
 
     useEffect(() => {
         const { isLoading, data } = meQuery;
-        const authPaths = ["/auth/login", "/auth/login/oauth2"]
         // 잘 못된 경로로 들어온 사람을 올바른 경로로 이동시켜주는 로직
         if (!isLoading) {
             if (data.status !== 200) {
@@ -30,12 +29,19 @@ function AuthRoute() {
             }
         }
     }, [pathname, meQuery.data]);
-    
+
+    if (meQuery.isLoading) {
+        return <>로딩중...</>;
+    }
+    if (meQuery.isSuccess && meQuery.data.status !== 200) {
+        return <Routes>
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/login/oauth2" element={<OAuth2 />} />
+        </Routes>
+    }
+
     return <Routes>
         <Route path="/" element={<></>} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/login/oauth2" element={<OAuth2 />} />
-        <Route path="/auth/signup" element={<SignUp />} />
     </Routes>
 }
 

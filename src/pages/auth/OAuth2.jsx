@@ -4,7 +4,8 @@ import { useMeQuery } from "../../queries/usersQueries";
 
 function OAuth2() {
     const navigate = useNavigate();
-    const [ searchParams ] = useSearchParams();
+    // get요청에서 사용된 param을 가져옴
+    const [ searchParams ] = useSearchParams(); 
     const accessToken = searchParams.get("accessToken");
     if (!!accessToken) {
             localStorage.setItem("AccessToken", accessToken);
