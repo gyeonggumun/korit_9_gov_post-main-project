@@ -19,12 +19,12 @@ function AuthRoute() {
         if (!isLoading) {
             if (data.status !== 200) {
                 // 로그인 버튼을 눌렀을 때 로그인이 되어 있지 않은 상태라면 로그인 페이지로 이동시켜줌
-                if (!authPaths.includes(pathname)) {
+                if (!pathname.startsWith("/auth")) {
                     navigate("/auth/login");
                 }
             } else {
                 // 로그인이 되어있는 상태인데 로그인 페이지로 넘어가려 하면 홈화면으로 이동시켜줌
-                if (authPaths.includes(pathname)) {
+                if (pathname.startsWith("/auth")) {
                     navigate("/");
                 }
             }
