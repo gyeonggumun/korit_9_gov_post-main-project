@@ -6,6 +6,8 @@ import OAuth2 from "../pages/auth/OAuth2";
 import { useMeQuery } from "../queries/usersQueries";
 import Logout from "../pages/auth/Logout";
 import Loading from "../components/common/Loading";
+import Home from "../pages/home/Home";
+import LeftSideBar from "../components/common/LeftSideBar";
 
 function AuthRoute() {
     const navigate = useNavigate();
@@ -42,10 +44,12 @@ function AuthRoute() {
         </Routes>
     }
 
-    return <Routes>
-        <Route path="/" element={<></>} />
-        <Route path="/logout" element={<Logout />} />
-    </Routes>
+    return <LeftSideBar>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/logout" element={<Logout />} />
+        </Routes>
+    </LeftSideBar>
 }
 
 export default AuthRoute;
