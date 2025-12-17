@@ -14,16 +14,17 @@ function AuthRoute() {
 
     useEffect(() => {
         const { isLoading, data } = meQuery;
+        const authPaths = ["/auth/login", "/auth/login/oauth2"]
         // 잘 못된 경로로 들어온 사람을 올바른 경로로 이동시켜주는 로직
         if (!isLoading) {
             if (data.status !== 200) {
                 // 로그인 버튼을 눌렀을 때 로그인이 되어 있지 않은 상태라면 로그인 페이지로 이동시켜줌
-                if (!["/auth/login", "/auth/login/oauth2"].includes(pathname)) {
+                if (!authPaths.includes(pathname)) {
                     navigate("/auth/login");
                 }
             } else {
                 // 로그인이 되어있는 상태인데 로그인 페이지로 넘어가려 하면 홈화면으로 이동시켜줌
-                if (["/auth/login", "/auth/login/oauth2"].includes(pathname)) {
+                if (authPaths.includes(pathname)) {
                     navigate("/");
                 }
             }
