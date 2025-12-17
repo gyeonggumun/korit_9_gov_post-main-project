@@ -4,6 +4,8 @@ import SignUp from "../pages/auth/SignUp";
 import { useEffect } from "react";
 import OAuth2 from "../pages/auth/OAuth2";
 import { useMeQuery } from "../queries/usersQueries";
+import Logout from "../pages/auth/Logout";
+import Loading from "../components/common/Loading";
 
 function AuthRoute() {
     const navigate = useNavigate();
@@ -31,7 +33,7 @@ function AuthRoute() {
     }, [pathname, meQuery.data]);
 
     if (meQuery.isLoading) {
-        return <>로딩중...</>;
+        return <Loading />;
     }
     if (meQuery.isSuccess && meQuery.data.status !== 200) {
         return <Routes>
@@ -42,6 +44,7 @@ function AuthRoute() {
 
     return <Routes>
         <Route path="/" element={<></>} />
+        <Route path="/logout" element={<Logout />} />
     </Routes>
 }
 
