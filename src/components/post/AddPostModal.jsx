@@ -1,8 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import ReactModal from "react-modal";
 import  * as s  from "./styles";
+import { useMeQuery } from "../../queries/usersQueries";
+import Loading from "../common/Loading";
+import Select from "react-select";
+import { IoCloudUploadOutline } from "react-icons/io5";
 
 function AddPostModal({isOpen, onRequestClose, layoutRef}) {
+
+    const {isLoading, data} = useMeQuery();
+
+    if (isLoading) {
+        return <Loading />
+    }
     // content => 안에 들어있는 박스, overlay => 바깥 바탕
     return <ReactModal 
         style={{
@@ -30,10 +40,33 @@ function AddPostModal({isOpen, onRequestClose, layoutRef}) {
                 <header>
                     <h2>Add a Post</h2>
                 </header>
-                <main></main>
+                <main>
+                    <div css={s.profileContainer}>
+                        <div css={s.profileImg(data.data.imgUrl)}></div>
+                            <div>{data.data.nickname}</div>
+                    </div>
+                    <Select 
+                        options={[
+                            {
+                                label: "Public",
+                                value: "Public"
+                            },
+                            {
+                                label: "Follow",
+                                value: "Follow"
+                            },
+                        ]}/>                       
+                    <div css={s.contentInputBox}>
+                        <textarea></textarea>
+                    </div>
+                    <div>
+                        <IoCloudUploadOutline />
+                    </div>
+                    <div></div>
+                </main>
                 <footer>
-                    <button>Post</button>
-                    <button>Cancle</button>
+                    <button css={s.postButton}>Post</button>
+                    <button onClick={onRequestClose}>Cancle</button>
                 </footer>
             </div>
     </ReactModal>
