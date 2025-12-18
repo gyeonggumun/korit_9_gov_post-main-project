@@ -47,6 +47,7 @@ background-color: #00000066;
 ///////////////<<  LeftSideBar  >>//////////////////////
 
 export const sideBarLayout = css`
+    position: relative;
     display: flex;
     width: 100%;
     height: 100%;
