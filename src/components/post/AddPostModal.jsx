@@ -6,14 +6,43 @@ import Loading from "../common/Loading";
 import Select from "react-select";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function AddPostModal({isOpen, onRequestClose, layoutRef}) {
+    const [ uploadImages, setUploadImages ] = useState([]);
     const imageListBoxRef = useRef();
     const {isLoading, data} = useMeQuery();
 
     const handleOnWheel = (e) => {
         imageListBoxRef.current.scrollLeft += e.deltaY;
+    }
+
+    // 이미지 리스트를 받는 click 생성
+    const handleFileLoadOnClick = () => {
+        const fileInput = document.createElement("input");
+        fileInput.setAttribute("type", "file");
+        fileInput.setAttribute("accept", "image/*");
+        fileInput.setAttribute("multiple", "true");
+        fileInput.click();
+        fileInput.onchange = (e) => {
+            const {files} = e.target;
+            const fileArray = Array.from(files);
+
+            const readFile = (file) => new Promise((resolve) => {
+                 const fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+                fileReader.onload = (e) => {
+                    resolve({
+                        file,
+                        dataUrl: e.target.result,
+                    })
+                }
+            });
+            Promise.all(fileArray.map(file => readFile(file)))
+            .then(result => {
+                setUploadImages([...uploadImages, ...result]);
+            })
+        }
     }
 
     if (isLoading) {
@@ -65,28 +94,20 @@ function AddPostModal({isOpen, onRequestClose, layoutRef}) {
                     <div css={s.contentInputBox}>
                         <textarea></textarea>
                     </div>
-                    <div css={s.uploadBox}>
+                    <div css={s.uploadBox} onClick={handleFileLoadOnClick}>
                         <IoCloudUploadOutline />
                         <div>Please Post your story.</div>
                         <button>Add Image</button>
                     </div>
                     <div css={s.imageListBox} ref={imageListBoxRef} onWheel={handleOnWheel}>
+                        {
+                            uploadImages.map(img => (
+                                <div css={s.preview(img.dataUrl)}>
+                                    <div><IoIosClose /></div>
+                                </div>
+                            ))
+                        }
                         
-                        <div css={s.preview()}>
-                            <div><IoIosClose /></div>
-                        </div>
-                        <div css={s.preview()}>
-                            <div><IoIosClose /></div>
-                        </div>
-                        <div css={s.preview()}>
-                            <div><IoIosClose /></div>
-                        </div>
-                        <div css={s.preview()}>
-                            <div><IoIosClose /></div>
-                        </div>
-                        <div css={s.preview()}>
-                            <div><IoIosClose /></div>
-                        </div>
                     </div>
                 </main>
                 <footer>

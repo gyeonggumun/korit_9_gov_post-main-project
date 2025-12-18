@@ -131,17 +131,27 @@ flex-shrink: 0;
     background-position: center;
     background-size: cover;
 
+    // 마우스를 올렸을 때 취소버튼이 생기도록 세팅
+    &:not(:hover) > div { 
+        opacity: 0; // 투명도
+    }
+
     & > div {
+        transform: translate(-50%, -50%);
         position: absolute;
-        top: 2px;
-        right: 2px;
+        top: 50%;
+        left: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
         box-sizing: border-box;
-        border-radius: 50%;
+        border: 1px solid #dbdbdb;
+        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
         color: #ffffff;
-        background-color: #ff6363;
+        background-color: #00000066;
         cursor: pointer;
     }
 `;
