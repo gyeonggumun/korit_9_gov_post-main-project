@@ -43,7 +43,7 @@ function LeftSideBar({children}) {
             {children}
         </div>
         {    // ref가 없는 처음에는 랜더링을 시키지 않기 위해서 조건 사용
-            !!layoutRef.current &&
+            !!layoutRef.current && addPostModalOpen &&
             <AddPostModal 
                 isOpen={addPostModalOpen} 
                 onRequestClose={addPostModalClose}
