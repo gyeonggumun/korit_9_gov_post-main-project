@@ -29,7 +29,7 @@ function AddPostModal({isOpen, onRequestClose, layoutRef}) {
             const fileArray = Array.from(files);
 
             const readFile = (file) => new Promise((resolve) => {
-                 const fileReader = new FileReader();
+                const fileReader = new FileReader();
                 fileReader.readAsDataURL(file);
                 fileReader.onload = (e) => {
                     resolve({
@@ -44,6 +44,14 @@ function AddPostModal({isOpen, onRequestClose, layoutRef}) {
             })
         }
     }
+
+    // 이미지 삭제 클릭 로직
+    const handleImageDeleteOnClick = (index) => {
+        const deletedImages = uploadImages.filter((img, imgIndex) => imgIndex !== index);
+        setUploadImages(deletedImages);
+    }
+        
+    
 
     if (isLoading) {
         return <Loading />
@@ -101,9 +109,9 @@ function AddPostModal({isOpen, onRequestClose, layoutRef}) {
                     </div>
                     <div css={s.imageListBox} ref={imageListBoxRef} onWheel={handleOnWheel}>
                         {
-                            uploadImages.map(img => (
+                            uploadImages.map((img, index) => (
                                 <div css={s.preview(img.dataUrl)}>
-                                    <div><IoIosClose /></div>
+                                    <div onClick={() => handleImageDeleteOnClick(index)}><IoIosClose /></div>
                                 </div>
                             ))
                         }
