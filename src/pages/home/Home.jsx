@@ -13,17 +13,26 @@ function Home() {
                 (isLoading && <Loading />) 
                 || data.pages.map(feeds => 
                     feeds.data.contents.map(feed => (
-                <div css={s.feedItemContainer}>
-                    <header>
-                        <div css={s.profileImage(feed.user.imgUrl)}></div>
-                        <div css={s.userInfo}>
-                            <div>{feed.user.nickname}</div>
-                            <div>{feed.createdAt}</div>
-                        </div>
-                    </header>
-                    <main></main>
-                    <footer></footer>
-                </div>
+                    <div key={feed.feedId} css={s.feedItemContainer}>
+                        <header>
+                            <div css={s.profileImage(feed.user.imgUrl)}></div>
+                            <div css={s.userInfo}>
+                                <div>{feed.user.nickname}</div>
+                                <div>{feed.createdAt}</div>
+                            </div>
+                        </header>
+                        <main>
+                            <div css={s.feedImageContainer}>
+
+                            </div>
+                            <div css={s.feedContentContainer}>
+                                {feed.content}
+                            </div>
+                        </main>
+                        <footer>
+
+                        </footer>
+                    </div>
                 )))
             }
         </div>
