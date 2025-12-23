@@ -6,14 +6,21 @@ import { IoHomeOutline, IoAddCircleOutline } from "react-icons/io5";
 import { MdOutlineExplore } from "react-icons/md";
 import { useMeQuery } from "../../queries/usersQueries";
 import AddPostModal from "../post/AddPostModal";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function LeftSideBar({children}) {
     const location = useLocation();
-    const {pathname} = location;
-    const [addPostModalOpen, setAddPostModalOpen] = useState(false);
+    const { pathname } = location;
+    const [ addPostModalOpen, setAddPostModalOpen] = useState(false);
+    const [ homeRefresh, setHomeRefresh ] = useState(false);
     const layoutRef = useRef();   // html 객체 선택
-    const {isLoading, data} = useMeQuery();
+    const { isLoading, data } = useMeQuery();
+
+    useEffect(() => {
+        if (homeRefresh) {
+            setHomeRefresh(false);
+        }
+    }, [homeRefresh]);
     
 
     const handleAddPostModelOpenOnClick = () => {
@@ -40,14 +47,15 @@ function LeftSideBar({children}) {
             </div>
         </aside>
         <div>
-            {children}
+            { !homeRefresh && children } 
         </div>
         {    // ref가 없는 처음에는 랜더링을 시키지 않기 위해서 조건 사용
             !!layoutRef.current && addPostModalOpen &&
             <AddPostModal 
                 isOpen={addPostModalOpen} 
                 onRequestClose={addPostModalClose}
-                layoutRef={layoutRef}/>
+                layoutRef={layoutRef}
+                setHomeRefresh={setHomeRefresh} />
         }
     </div>
 }

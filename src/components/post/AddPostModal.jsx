@@ -7,10 +7,9 @@ import Select from "react-select";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import { useRef, useState } from "react";
-import { createPost } from "../../apis/posts/postsApi";
 import { useCreatePostMutation } from "../../mutations/postMutations";
 
-function AddPostModal({isOpen, onRequestClose, layoutRef}) {
+function AddPostModal({isOpen, onRequestClose, layoutRef, setHomeRefresh}) {
     const [ visibilityOption, setVisibilityOption ] = useState({label: "Public", value: "Public"});
     const [ textareaValue, setTextareaValue ] = useState("");
     const [ uploadImages, setUploadImages ] = useState([]);
@@ -67,6 +66,7 @@ function AddPostModal({isOpen, onRequestClose, layoutRef}) {
         try {
             await createPostMutation.mutateAsync(formData);
             alert("작성 완료");
+            setHomeRefresh(true);
             onRequestClose();
         } catch (error) {
             alert(error.response.data.message);
