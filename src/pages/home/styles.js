@@ -77,7 +77,14 @@ export const userInfo = css`
 `;
 
 export const feedImageContainer = css`
+    & > .slick-prev {
+        left: 25px;
+        
+    }
 
+    & > .slick-next {
+        right: 25px
+    }
 `;
 
 export const feedContentContainer = css`
@@ -86,6 +93,7 @@ export const feedContentContainer = css`
     width: 100%;
     text-overflow: ellipsis;
     white-space: pre-wrap;
+    word-wrap: break-word;
     font-size: 14px;
     color: #222222;
 `;
