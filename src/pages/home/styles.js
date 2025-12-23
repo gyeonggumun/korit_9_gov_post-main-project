@@ -77,15 +77,32 @@ export const userInfo = css`
 `;
 
 export const feedImageContainer = css`
-    & > .slick-prev {
+    & .slick-prev {
         left: 25px;
-        
+        z-index: 2;
+
+        &::before {
+            color: black;
+        }
     }
 
-    & > .slick-next {
-        right: 25px
+    & .slick-next {
+        right: 25px;
+        z-index: 2;
+
+        &::before {
+            color: black;
+        }
     }
 `;
+
+export const feedImage = (url) => css`
+    width: 100%;
+    height: 300px;
+    background-image: url(${url});
+    background-position: center;
+    background-size: cover;
+`
 
 export const feedContentContainer = css`
     box-sizing: border-box;
