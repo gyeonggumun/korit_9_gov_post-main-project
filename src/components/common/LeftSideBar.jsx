@@ -46,9 +46,7 @@ function LeftSideBar({children}) {
                 <Link to={"/logout"}>Logout</Link>
             </div>
         </aside>
-        <div>
-            { !homeRefresh && children } 
-        </div>
+        { !homeRefresh && children } 
         {    // ref가 없는 처음에는 랜더링을 시키지 않기 위해서 조건 사용
             !!layoutRef.current && addPostModalOpen &&
             <AddPostModal 

@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 export const layout = css`
     display: flex;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 0 20px;
     width: 100%;
     height: 100%;
 `;
@@ -12,9 +12,8 @@ export const feedContainer = (commentOpen) => css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-    width: 65%;
-    overflow-y: ${commentOpen ? "hidden" : "auto"};
+    width: 60%;
+    overflow-y: ${commentOpen ? "hidden" : "auto"}; // 댓글 창이 켜져있으면 스크롤 불가능 하도록 설정
 
     &::-webkit-scrollbar {
         display: none;
@@ -29,7 +28,8 @@ export const followInfoContainer = css`
 `;
 
 export const feedItemContainer = css`
-    margin: 10px;
+    margin-top: 20px;
+    box-sizing: border-box;
     border-radius: 8px;
     padding: 10px;
     width: 400px;
@@ -120,7 +120,7 @@ export const feedImageContainer = css`
 
 export const feedImage = (url) => css`
     width: 100%;
-    height: 300px;
+    height: 380px;
     background-image: url("${url}");
     background-position: center;
     background-size: cover;
@@ -137,13 +137,18 @@ export const feedContentContainer = css`
     color: #222222;
 `;
 
-export const commentContainer = css`
+export const commentContainer = (commentOpen) => css`
+    position: absolute;
+    right: 20px;
     margin-top: 20px;
     box-sizing: border-box;
     border-radius: 8px;
-    width: 35%;
+    width: 260px;
     height: 540px;
     box-shadow: 0 0 10px #00000066;
     background-color: #ffffff;
     overflow: hidden;
+    transition: all 0.2s ease-in-out;
+    // 존재하지만 보이지 않도록 설정
+    opacity: ${commentOpen ? 1 : 0}; 
 `;

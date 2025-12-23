@@ -82,14 +82,12 @@ function Home() {
                 }
             </div>
         </div>
-        {
-            commentOpen &&
-            <div css={s.commentContainer}></div>
-        }
+        <div css={s.commentContainer(commentOpen)}>
 
-        {/* <div css={s.followInfoContainer} >
+        </div>
+        <div css={s.followInfoContainer} >
 
-        </div> */}
+        </div>
     </div>
 }
 
