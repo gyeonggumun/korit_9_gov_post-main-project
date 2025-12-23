@@ -99,7 +99,7 @@ export const feedImageContainer = css`
 export const feedImage = (url) => css`
     width: 100%;
     height: 300px;
-    background-image: url(${url});
+    background-image: url("${url}");
     background-position: center;
     background-size: cover;
 `
