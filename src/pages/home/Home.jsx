@@ -5,11 +5,27 @@ import  * as s  from "./styles";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useEffect, useRef } from "react";
+import { FadeLoader } from "react-spinners";
 
 function Home() {
-    const { isLoading, data } = useGetFeeds();
-    console.log("isLoading:", isLoading);
-    console.log("data:", data)
+    const { isLoading, isFetching, isPending, data, hasNextPage, fetchNextPage } = useGetFeeds();
+    const loadMoreRef = useRef();
+    console.log(isFetching);
+    console.log(isLoading);
+    console.log(isPending);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            const [obs] = entries;
+            if (obs.isIntersecting && hasNextPage) {
+                fetchNextPage();
+            }
+        }, {threshold: 1});
+
+        observer.observe(loadMoreRef.current);
+    }, [hasNextPage]);
+
     return <div css={s.layout}>
         <div css={s.feedContainer} >
             {
@@ -18,9 +34,9 @@ function Home() {
                     feeds.data.contents.map(feed => (
                     <div key={feed.feedId} css={s.feedItemContainer}>
                         <header>
-                            <div css={s.profileImage(feed.user.imgUrl)}></div>
+                            <div css={s.profileImage(feed.user?.imgUrl)}></div>
                             <div css={s.userInfo}>
-                                <div>{feed.user.nickname}</div>
+                                <div>{feed.user?.nickname}</div>
                                 <div>{feed.createdAt}</div>
                             </div>
                         </header>
@@ -52,6 +68,12 @@ function Home() {
                     </div>
                 )))
             }
+            <div ref={loadMoreRef} style={{padding: "10px 0"}}>
+                {
+                    isFetching &&
+                    <FadeLoader />
+                }
+            </div>
         </div>
         <div css={s.followInfoContainer} ></div>
     </div>
