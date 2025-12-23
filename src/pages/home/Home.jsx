@@ -5,10 +5,13 @@ import  * as s  from "./styles";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FadeLoader } from "react-spinners";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import { IoChatbubbleOutline } from "react-icons/io5";
 
 function Home() {
+    const [ commentOpen, setCommentOpen ] = useState(false);
     const { isLoading, isFetching, isPending, data, hasNextPage, fetchNextPage } = useGetFeeds();
     const loadMoreRef = useRef();
     console.log(isFetching);
@@ -26,8 +29,12 @@ function Home() {
         observer.observe(loadMoreRef.current);
     }, [hasNextPage]);
 
+    const handleCommentOnClick = () => {
+        setCommentOpen(!commentOpen)
+    }
+
     return <div css={s.layout}>
-        <div css={s.feedContainer} >
+        <div css={s.feedContainer(commentOpen)}>
             {
                 (isLoading && <Loading />) 
                 || data.pages.map(feeds => 
@@ -63,19 +70,26 @@ function Home() {
                             </div>
                         </main>
                         <footer>
-
+                            <div>{ false ? <IoMdHeart /> : <IoMdHeartEmpty /> }</div>
+                            <div onClick={handleCommentOnClick}><IoChatbubbleOutline /></div>
                         </footer>
                     </div>
                 )))
             }
             <div ref={loadMoreRef} style={{padding: "10px 0"}}>
                 {
-                    isFetching &&
-                    <FadeLoader />
+                    isFetching && !isLoading && <FadeLoader />
                 }
             </div>
         </div>
-        <div css={s.followInfoContainer} ></div>
+        {
+            commentOpen &&
+            <div css={s.commentContainer}></div>
+        }
+
+        {/* <div css={s.followInfoContainer} >
+
+        </div> */}
     </div>
 }
 
