@@ -53,7 +53,7 @@ margin-right: 10px;
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    background-image: url(${url});
+    background-image: url("${url}");
     background-position: center;
     background-size: cover;
 `;
