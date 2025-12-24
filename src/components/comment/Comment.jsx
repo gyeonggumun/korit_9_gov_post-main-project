@@ -2,19 +2,29 @@
 import { BiSend } from "react-icons/bi";
 import  * as s  from "./styles";
 import { useState } from "react";
+import { useCreatePostCommentMutation } from "../../mutations/postMutations";
 
-function Comment() {
+function Comment({postId}) {
     const [ inputValue, setInputValue ] = useState("");
+    const commentMutation = useCreatePostCommentMutation();
 
     const handleOnChange = (e) => {
         setInputValue(e.target.value);
     }
 
-    const handleOnSubmit = () => {
-        
+    const handleOnSubmit = async () => {
+        const data = {
+            parentCommentId: 0,
+            parentUserId: 0,
+            content: inputValue,
+        };
+
+        await commentMutation.mutateAsync({postId, data});
+        alert("댓글 작성 완료");
+        setInputValue("");
     }
 
-    const handleOnKeyDown = () => {
+    const handleOnKeyDown = (e) => {
         if (e.key === "Enter"){
             handleOnSubmit();
         }
