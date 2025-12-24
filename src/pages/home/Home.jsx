@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { FadeLoader } from "react-spinners";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { IoChatbubbleOutline } from "react-icons/io5";
+import Comment from "../../components/comment/Comment";
 
 function Home() {
     const [ commentOpen, setCommentOpen ] = useState(false);
@@ -83,7 +84,7 @@ function Home() {
             </div>
         </div>
         <div css={s.commentContainer(commentOpen)}>
-
+                <Comment />
         </div>
         <div css={s.followInfoContainer} >
 
