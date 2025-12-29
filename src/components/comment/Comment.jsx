@@ -57,9 +57,11 @@ function Comment({postId}) {
                         <div>
                             {new Date(comment.createdAt).toLocaleString()} 
                             {
-                                !comment.parentCommentId && comment.commentId === recommentId.parentCommentId
-                                ? <span onClick={() => handleRecommentOnClick(0, 0)}>답글취소</span>
-                                : <span onClick={() => handleRecommentOnClick(comment.commentId, comment.userId)}>답글달기</span>
+                                !comment.parentCommentId && (
+                                    comment.commentId === recommentId.parentCommentId
+                                    ? <span onClick={() => handleRecommentOnClick(0, 0)}>답글취소</span>
+                                    : <span onClick={() => handleRecommentOnClick(comment.commentId, comment.userId)}>답글달기</span>
+                                )
                             }
                         </div>
                     </div>
