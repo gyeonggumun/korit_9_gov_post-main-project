@@ -3,10 +3,12 @@ import { BiSend } from "react-icons/bi";
 import  * as s  from "./styles";
 import { useState } from "react";
 import { useCreatePostCommentMutation } from "../../mutations/postMutations";
+import { useGetCommentsQuery } from "../../queries/commentsQueries";
 
 function Comment({postId}) {
     const [ inputValue, setInputValue ] = useState("");
     const commentMutation = useCreatePostCommentMutation();
+    const { isLoading, data } = useGetCommentsQuery(postId);
 
     const handleOnChange = (e) => {
         setInputValue(e.target.value);
@@ -34,22 +36,29 @@ function Comment({postId}) {
     return <div css={s.layout} >
         <h2>댓글</h2>
         <div css={s.commentItemList}>
-            <div css={s.commentItem}>
-                <div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div></div>
-            </div>
-
+            {
+                !isLoading &&
+                data?.data?.map(comment => (
+                    <div css={s.commentItem(comment.level)}>
+                        <div>
+                            <div css={s.commentProfileImage(comment.imgUrl)}></div>
+                            <div>{comment.nickname}</div>
+                        </div>
+                        <div><span>{!!comment.parentNickname && "@" + comment.parentNickname}</span> {comment.content}</div>
+                        <div>{new Date(comment.createdAt).toLocaleString()}</div>
+                    </div>
+                ))
+            }
         </div>
-        <div css={s.commentInput}>
-            <input type="text" 
-                placeholder="댓글을 입력하세요."
-                value={inputValue}
-                onChange={handleOnChange}
-                onKeyDown={handleOnKeyDown}/>
-            <BiSend onClick={handleOnSubmit} />
+        <div>
+            <div css={s.commentInput}>
+                <input type="text" 
+                    placeholder="댓글을 입력하세요."
+                    value={inputValue}
+                    onChange={handleOnChange}
+                    onKeyDown={handleOnKeyDown}/>
+                <BiSend onClick={handleOnSubmit} />
+            </div>
         </div>
     </div>
 }
