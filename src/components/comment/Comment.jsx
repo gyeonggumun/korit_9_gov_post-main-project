@@ -8,7 +8,7 @@ import { useGetCommentsQuery } from "../../queries/commentsQueries";
 function Comment({postId}) {
     const [ inputValue, setInputValue ] = useState("");
     const commentMutation = useCreatePostCommentMutation();
-    const { isLoading, data } = useGetCommentsQuery(postId);
+    const { isLoading, data, refetch } = useGetCommentsQuery(postId);
 
     const handleOnChange = (e) => {
         setInputValue(e.target.value);
@@ -22,7 +22,7 @@ function Comment({postId}) {
         };
 
         await commentMutation.mutateAsync({postId, data});
-        alert("댓글 작성 완료");
+        await refetch();
         setInputValue("");
     }
 
