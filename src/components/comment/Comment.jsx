@@ -7,6 +7,10 @@ import { useGetCommentsQuery } from "../../queries/commentsQueries";
 
 function Comment({postId}) {
     const [ inputValue, setInputValue ] = useState("");
+    const [ recommentId, setRecommentId ] = useState({
+        parentCommentId: 0,
+        parentUserId: 0,
+    });
     const commentMutation = useCreatePostCommentMutation();
     const { isLoading, data, refetch } = useGetCommentsQuery(postId);
 
@@ -16,8 +20,7 @@ function Comment({postId}) {
 
     const handleOnSubmit = async () => {
         const data = {
-            parentCommentId: 0,
-            parentUserId: 0,
+            ...recommentId,
             content: inputValue,
         };
 
@@ -32,6 +35,12 @@ function Comment({postId}) {
         }
     }
 
+    const handleRecommentOnClick = (commentId, userId) => {
+        setRecommentId({
+            parentCommentId: commentId,
+            parentUserId: userId,
+        });
+    }
 
     return <div css={s.layout} >
         <h2>댓글</h2>
@@ -39,13 +48,20 @@ function Comment({postId}) {
             {
                 !isLoading &&
                 data?.data?.map(comment => (
-                    <div css={s.commentItem(comment.level)}>
+                    <div key={comment.commentId} css={s.commentItem(comment.level, comment.commentId === recommentId.parentCommentId)}>
                         <div>
                             <div css={s.commentProfileImage(comment.imgUrl)}></div>
                             <div>{comment.nickname}</div>
                         </div>
                         <div><span>{!!comment.parentNickname && "@" + comment.parentNickname}</span> {comment.content}</div>
-                        <div>{new Date(comment.createdAt).toLocaleString()}</div>
+                        <div>
+                            {new Date(comment.createdAt).toLocaleString()} 
+                            {
+                                !comment.parentCommentId && comment.commentId === recommentId.parentCommentId
+                                ? <span onClick={() => handleRecommentOnClick(0, 0)}>답글취소</span>
+                                : <span onClick={() => handleRecommentOnClick(comment.commentId, comment.userId)}>답글달기</span>
+                            }
+                        </div>
                     </div>
                 ))
             }

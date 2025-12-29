@@ -18,9 +18,12 @@ export const commentItemList = css`
     overflow-y: scroll;
 `;
 
-export const commentItem = (level) => css`
+export const commentItem = (level, isRecomment) => css`
     box-sizing: border-box;
-    margin: 5px 0;
+    margin: 10px 0;
+    border: 1px solid ${!!isRecomment ? "#dbdbdbff": "#dbdbdb00"};
+    border-radius: 5px;
+    padding: 3px;
     width: 100%;
     padding-left: calc(20px * ${level});
 
@@ -47,6 +50,12 @@ export const commentItem = (level) => css`
         font-size: 10px;
         color: #777777;
         cursor: default;
+
+        & > span {
+            padding-left: 5px;
+            font-weight: 500;
+            cursor: pointer;
+        }
     }
 `;
 
