@@ -42,8 +42,12 @@ function OpenaiApiModal() {
     const [ disabled, setDisabled ] = useState(true);
 
     const handleOnKeyDown = (e) => {
-        if (e.ctrlKey && e.key === "Enter" && !!e.target.value) {
-            handleSend();
+        if(!e.shiftKey && e.key === "Enter") {
+            e.preventDefault();  // 기본동작 막는 행위
+
+            if(inputValue.trim()) {
+                handleSend();
+            }
         }
     }
 

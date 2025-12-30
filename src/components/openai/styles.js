@@ -7,9 +7,10 @@ export const layout = css`
 `;
 
 export const chatContainer = css`
-    display: flex;
-    flex-direction: column;
+    position: relative;
     margin-bottom: 10px;
+    box-sizing: border-box;
+    padding: 10px;
     width: 100%;
     height: 85%;
     min-height: 75%;
@@ -67,5 +68,20 @@ export const answer = css`
 `;
 
 export const question = css`
-
+    position: relative;
+    left: 100%;
+    transform: translate(-100%);
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #eeeeee;
+    color: #222222;
+    width: fit-content;
+    max-width: 50%;
+    max-height: 300px;
+    min-height: 50px;
+    overflow-y: auto;
+    align-self: flex-end;
+    word-wrap: break-word;
 `;
