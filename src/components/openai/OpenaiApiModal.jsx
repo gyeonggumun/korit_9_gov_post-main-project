@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import { useEffect, useRef, useState } from "react";
 import { sendTextOpenai } from "../../apis/openai/openaiApi";
+import ReactMarkdown from "react-markdown";
+import regypeHighlight from "regype-highlight";
 
 function TypingEffect({text, speed = 50}) {
     const [ displayText, setDisplayText ] = useState("");
@@ -23,8 +25,9 @@ function TypingEffect({text, speed = 50}) {
     }, [text]);
 
     return <div>
-        {displayText}
-        {isTyping && <span>|</span>}
+        <ReactMarkdown>
+            {displayText}
+        </ReactMarkdown>
     </div>
 }
 
