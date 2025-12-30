@@ -1,22 +1,26 @@
-import OpenAI from "openai";
+/** @jsxImportSource @emotion/react */
+import  * as s  from "./styles";
+
 import { useEffect, useRef, useState } from "react";
 import { sendTextOpenai } from "../../apis/openai/openaiApi";
 import ReactMarkdown from "react-markdown";
-import regypeHighlight from "regype-highlight";
+import rehypeHighlight from "rehype-highlight";
+import 'highlight.js/styles/github-dark.css';
+import {PulseLoader} from "react-spinners"
+import { MdUpload } from "react-icons/md";
 
 function TypingEffect({text, speed = 50}) {
     const [ displayText, setDisplayText ] = useState("");
-    const [ isTyping, setTyping ] = useState(true);
     const textIndex = useRef(0);
+
 
     useEffect(() => {
         const textArray = Array.from(text);
-
+        
         const timer = setInterval(() => {
             if (textIndex.current < textArray.length) {
                 setDisplayText(prev => prev + textArray[textIndex.current++]);
             } else {
-                setTyping(false);
                 clearInterval(timer);
             }
         }, speed);
@@ -25,37 +29,78 @@ function TypingEffect({text, speed = 50}) {
     }, [text]);
 
     return <div>
-        <ReactMarkdown>
+        <ReactMarkdown rehypePlugins={rehypeHighlight}>
             {displayText}
         </ReactMarkdown>
     </div>
 }
 
 function OpenaiApiModal() {
+    const [ chatData, setChatData] = useState([]);
     const [ inputValue, setInputValue ] = useState("");
-    const [ response, setResponse ] = useState(null);
     const [ isLoading, setLoading ] = useState(false);
+    const [ disabled, setDisabled ] = useState(true);
 
-    const handleSend = async () => {
+    const handleOnKeyDown = (e) => {
+        if (e.ctrlKey && e.key === "Enter" && !!e.target.value) {
+            handleSend();
+        }
+    }
+
+    const handleSend = () => {
         setLoading(true);
-        setResponse(await sendTextOpenai(inputValue));
+        setChatData(prev => [...prev, {
+            type:  "question",
+            content: inputValue,
+        }]);
+        setInputValue("");
     }
 
     useEffect(() => {
-        if (isLoading) {    
+        setDisabled(!inputValue.trim());
+    }, [inputValue]);
+
+    useEffect(() => {
+        if (!!chatData.length && chatData[chatData.length - 1].type == "question"){
+            sendTextOpenai(chatData[chatData.length - 1].content)
+            .then(resp => {
+                setChatData(prev => [...prev,  {
+                    type: "answer",
+                    content: resp.output_text,
+                }]);
+            })
+        } else {
             setLoading(false);
         }
-    }, [response]);
+    }, [chatData]);
 
-    return <div>
-        <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
-        <button onClick={handleSend}>전송</button>
-        {
-            !isLoading && !!response &&
-            <TypingEffect text={response.output_text} />
-        }
+    return <div css={s.layout}>
+        <div css={s.chatContainer}> 
+            {
+                chatData.map((data, index) => {
+                    if (data.type === "question") {
+                        return <div key={index} css={s.question}>{data.content}</div>
+                    } else if (index === chatData.length - 1) {
+                        return <div key={index} css={s.answer}>
+                            {                            
+                                !isLoading && !!data.content && 
+                                <TypingEffect text={data.content} speed={10}/>
+                            }
+                        </div>
+                    } else {
+                        return <div key={index} css={s.answer}>{data.content}</div>
+                    }
+                })
+            }
+            {
+                isLoading && <PulseLoader/>
+            }
+        </div>
+        <div css={s.inputContainer}> 
+            <textarea value={inputValue} onKeyDown={handleOnKeyDown} onChange={(e) => setInputValue(e.target.value)} />
+            <button onClick={handleSend} disabled={disabled}><MdUpload/></button>
+        </div>
     </div>
-    
 }
 
 export default OpenaiApiModal;
