@@ -92,7 +92,9 @@ function OpenaiApiModal() {
                             }
                         </div>
                     } else {
-                        return <div key={index} css={s.answer}>{data.content}</div>
+                        return <div key={index} css={s.answer}>
+                            <ReactMarkdown rehypePlugins={rehypeHighlight}>{data.content}</ReactMarkdown>
+                            </div>
                     }
                 })
             }

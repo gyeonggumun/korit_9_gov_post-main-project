@@ -64,7 +64,7 @@ export const inputContainer = css`
 `;
 
 export const answer = css`
-    
+    margin-bottom: 5px;
 `;
 
 export const question = css`
@@ -78,10 +78,11 @@ export const question = css`
     background-color: #eeeeee;
     color: #222222;
     width: fit-content;
-    max-width: 50%;
+    max-width: 80%;
     max-height: 300px;
     min-height: 50px;
     overflow-y: auto;
     align-self: flex-end;
     word-wrap: break-word;
+    white-space: pre-wrap;
 `;
